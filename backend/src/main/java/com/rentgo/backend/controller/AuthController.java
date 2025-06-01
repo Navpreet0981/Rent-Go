@@ -73,6 +73,7 @@ public class AuthController {
         );
 
         String jwt = jwtService.generateToken(authentication);
+        //Updated From Git Hub
 
         //  Send token + role in response
         Map<String, String> response = new HashMap<>();

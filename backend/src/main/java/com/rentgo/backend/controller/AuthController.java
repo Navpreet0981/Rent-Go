@@ -2,6 +2,7 @@ package com.rentgo.backend.controller;
 
 import com.rentgo.backend.dto.LoginRequest;
 import com.rentgo.backend.dto.RegisterRequest;
+import com.rentgo.backend.dto.UserDTO;
 import com.rentgo.backend.model.Role;
 import com.rentgo.backend.model.User;
 import com.rentgo.backend.repository.UserRepository;
@@ -107,6 +108,7 @@ public class AuthController {
         Map<String, Object> response = new HashMap<>();
         response.put("token", jwt);
         response.put("role", user.getRole().name());  // assuming getRole() returns enum
+        response.put("user", new UserDTO(user)); // ✅ include user object
 
         return ResponseEntity.ok(response);
     }

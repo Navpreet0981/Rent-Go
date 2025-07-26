@@ -26,20 +26,6 @@ const Login = () => {
         }));
     };
 
-
-
-    // const handleSubmit = async (e) => {
-    //     e.preventDefault();
-    //     setMessage('');
-    //     try {
-    //         await axios.post('http://localhost:8080/api/auth/login', formData);
-    //         setMessage('✅ Login successful!');
-    //         // handle JWT/token or redirection here
-    //     } catch (err) {
-    //         setMessage(`❌ ${err.response?.data || 'Login failed!'}`);
-    //     }
-    // };
-
     const handleSubmit = async (e) => {
         e.preventDefault();
         setMessage('');
@@ -47,11 +33,12 @@ const Login = () => {
             const response = await axios.post('http://localhost:8080/api/auth/login', formData);
 
             // response.data now has { token, role }
-            const { token, role } = response.data;
+            const { token, role, user } = response.data;
 
             // Save to localStorage
             localStorage.setItem('token', token);
             localStorage.setItem('role', role);
+            localStorage.setItem('user', JSON.stringify(user)); // ✅ so username shows in Navbar
 
             setMessage('✅ Login successful! Redirecting...');
 
@@ -65,10 +52,6 @@ const Login = () => {
             setMessage(`❌ ${err.response?.data || 'Login failed!'}`);
         }
     };
-
-
-
-
 
     return (
         <div className="container login-container">
@@ -140,3 +123,6 @@ const Login = () => {
 };
 
 export default Login;
+
+// navpreet_507 -> password123 -> Customer
+// navpreet507 -> password123 -> Admin

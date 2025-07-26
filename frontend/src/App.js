@@ -9,6 +9,8 @@ import Login from './components/auth/Login';
 import Register from './components/auth/Register';
 import CustomerDashboard from './components/customer/CustomerDashboard';
 import AdminDashboard from './components/admin/AdminDashboard';
+import Details from './components/common/Details';
+
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css'; // <-- import App.css for layout styles
@@ -28,6 +30,7 @@ function App() {
               <Route path="/" element={<Home />} />
               <Route path="/login" element={<Login />} />
               <Route path="/register" element={<Register />} />
+              <Route path="/car/:id" element={<Details />} />
 
               {/* Role-protected routes */}
               <Route

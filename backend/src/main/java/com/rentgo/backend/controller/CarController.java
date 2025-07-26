@@ -20,6 +20,11 @@ public class CarController {
         return carRepository.findAll();
     }
 
+    @GetMapping("/{id}")
+    public Car getCarById(@PathVariable Long id) {
+        return carRepository.findById(id).orElse(null);
+    }
+
     @PostMapping
     public Car addCar(@RequestBody Car car) {
         return carRepository.save(car);

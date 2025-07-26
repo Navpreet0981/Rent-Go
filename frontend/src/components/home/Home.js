@@ -6,8 +6,13 @@ import React, { useState, useEffect } from 'react';
 import SearchBar from './SearchBar';
 import axios from 'axios';
 import './Home.css';
+import { useNavigate } from 'react-router-dom';
+
 
 const Home = () => {
+    const navigate = useNavigate();
+
+
     const [cars, setCars] = useState([]);
     const [filteredCars, setFilteredCars] = useState([]);
     const [searchTerm, setSearchTerm] = useState('');
@@ -77,7 +82,12 @@ const Home = () => {
                                     <h5 className="card-title">{car.brand} {car.model}</h5>
                                     <p className="card-text">₹{car.pricePerDay} / day</p>
                                     <p className="card-text text-muted">{car.variant}</p>
-                                    <button className="btn btn-primary mt-auto">Rent Now</button>
+                                    <button
+                                        className="btn btn-primary mt-auto"
+                                        onClick={() => navigate(`/car/${car.id}`)}
+                                    >
+                                        Rent Now
+                                    </button>
                                 </div>
                             </div>
                         </div>

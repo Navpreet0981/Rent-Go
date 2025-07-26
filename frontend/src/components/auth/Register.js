@@ -30,25 +30,17 @@ const Register = () => {
         }));
     };
 
-    // const handleSubmit = async (e) => {
-    //     e.preventDefault();
-    //     setMessage('');
-    //     try {
-    //         await axios.post('http://localhost:8080/api/auth/register', formData);
-    //         setMessage('✅ Registration successful!');
-    //     } catch (err) {
-    //         setMessage(`❌ ${err.response?.data || 'Registration failed!'}`);
-    //     }
-    // };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         setMessage('');
         try {
             const response = await axios.post('http://localhost:8080/api/auth/register', formData);
 
-            const { token, role } = response.data;
+            const { token, role, user } = response.data;
             localStorage.setItem('token', token);
             localStorage.setItem('role', role);
+            localStorage.setItem('user', JSON.stringify(user));
 
             setMessage('✅ Registration successful! Redirecting...');
 

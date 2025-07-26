@@ -1,11 +1,15 @@
 // src/components/Navbar.js
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import './Navbar.css'
 
 const Navbar = () => {
     const [darkMode, setDarkMode] = useState(true);
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [role, setRole] = useState(null);
+    const user = JSON.parse(localStorage.getItem('user'));
+    const username = user?.username || '';
+    const [showWelcome, setShowWelcome] = useState(false);
 
     useEffect(() => {
         document.body.className = darkMode ? 'bg-dark text-white dark-mode' : 'bg-light text-dark';
@@ -21,21 +25,46 @@ const Navbar = () => {
     const handleLogout = () => {
         localStorage.removeItem('token');
         localStorage.removeItem('role');
-        window.location.href = '/'; // redirect to login page after logout
+        localStorage.removeItem('user'); // ✅ remove user too
+        window.location.href = '/'; // redirect to home/login
     };
+
+
+    useEffect(() => {
+        const interval = setInterval(() => {
+            setShowWelcome((prev) => !prev); // Toggle every 30s
+        }, 10000); // 30,000 ms = 30 seconds
+
+        return () => clearInterval(interval); // cleanup
+    }, []);
 
     return (
         <nav className={`navbar navbar-expand-lg ${darkMode ? 'navbar-dark bg-dark' : 'navbar-light bg-light'} px-4`}>
-            <Link className="navbar-brand d-flex align-items-center" to="/">
+            <Link
+                className="navbar-brand d-flex align-items-center gap-2"
+                to="/"
+                style={{ height: '100%', alignItems: 'center' }}
+            >
                 <img
-                    src="https://cdn-icons-png.flaticon.com/512/2972/2972185.png" // Car logo icon
+                    src="https://cdn-icons-png.flaticon.com/512/2972/2972185.png"
                     alt="RentGo Logo"
                     width="35"
                     height="35"
-                    className="me-2"
+                    style={{ verticalAlign: 'middle' }}
                 />
-                <strong>RentGo</strong>
+                <div className="brand-wrapper d-flex align-items-center" style={{ position: 'relative', minHeight: '35px' }}>
+                    <span className={`brand-text ${!showWelcome ? 'fade-in' : 'fade-out'}`}>
+                        RentGo
+                    </span>
+                    <span className={`welcome-text ${showWelcome ? 'fade-in' : 'fade-out'}`}>
+                        Welcome, {username}
+                    </span>
+                </div>
             </Link>
+
+
+
+
 
             <button
                 className="navbar-toggler"

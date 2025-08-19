@@ -1,10 +1,11 @@
-// src/components/customer/CustomerDashboard.js
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import axios from "axios";
+import { DarkModeContext } from '../../contexts/DarkModeContext';
 
 const CustomerDashboard = () => {
+    const { darkMode } = useContext(DarkModeContext);
     const [bookings, setBookings] = useState([]);
-    const user = JSON.parse(localStorage.getItem('user')); // must be stored at login
+    const user = JSON.parse(localStorage.getItem('user'));
 
     useEffect(() => {
         if (user) {
@@ -19,50 +20,89 @@ const CustomerDashboard = () => {
         return <div className="container py-5">Please log in to view your bookings.</div>;
     }
 
+    const handleEdit = (booking) => {
+        // logic to open edit form/modal with booking data
+        alert("Edit booking " + booking.id);
+    };
+
+    const handlePay = (booking) => {
+        // logic to start payment
+        alert("Pay for booking " + booking.id);
+    };
+
     return (
         <div className="container py-5">
-            <h2 className="mb-4">Welcome, {user.name}!</h2>
-            <h4>Your Bookings</h4>
-
+            <h4 className="mb-4">Your Bookings</h4>
             {bookings.length === 0 ? (
                 <p>No bookings found.</p>
             ) : (
-                <div className="row">
-                    {bookings.map((booking) => {
-                        const car = booking.car;
-                        if (!car) return null; // ⛔️ Skip rendering this booking if car is undefined
+                bookings.map((booking) => {
+                    const car = booking.car;
+                    if (!car) return null;
 
-                        return (
-                            <div key={booking.id} className="col-md-6 mb-4">
-                                <div className="card shadow-sm">
-                                    <img
-                                        src={car.imageUrl}
-                                        className="card-img-top"
-                                        alt={car.model}
-                                        style={{ height: "200px", objectFit: "cover" }}
-                                    />
-                                    <div className="card-body">
-                                        <h5 className="card-title">
-                                            {car.brand} {car.model}
-                                        </h5>
-                                        <p><strong>From:</strong> {booking.startDate}</p>
-                                        <p><strong>To:</strong> {booking.endDate}</p>
-                                        <p><strong>Price/Day:</strong> ₹{car.pricePerDay}</p>
-                                        <p>
-                                            <strong>Total:</strong> ₹
-                                            {(
-                                                ((new Date(booking.endDate) - new Date(booking.startDate)) /
-                                                    (1000 * 60 * 60 * 24)) *
-                                                car.pricePerDay
-                                            ).toFixed(0)}
-                                        </p>
+                    const start = new Date(booking.startDate);
+                    const end = new Date(booking.endDate);
+                    const days = Math.ceil((end - start) / (1000 * 60 * 60 * 24)) || 1;
+                    const total = days * car.pricePerDay;
+
+                    return (
+                        <div
+                            key={booking.id}
+                            className={`card shadow-sm mb-4 ${darkMode ? 'bg-dark text-white' : 'bg-white text-dark'}`}
+                            style={{
+                                width: "100%",
+                                maxWidth: "100%",
+                                borderRadius: "15px",
+                                border: "none",
+                                padding: "0",
+                                transition: "background-color 0.5s ease, color 0.5s ease"
+                            }}
+                        >
+                            <div className="d-flex flex-row align-items-center" style={{ minHeight: "140px" }}>
+                                <img
+                                    src={car.imageUrl}
+                                    alt={car.model}
+                                    style={{
+                                        height: "120px",
+                                        width: "auto",
+                                        objectFit: "contain",
+                                        borderRadius: "10px 0 0 10px",
+                                        background: darkMode ? "#343a40" : "#f8f9fa",
+                                        transition: "background-color 0.5s ease"
+                                    }}
+                                />
+                                {/* Details and Buttons */}
+                                <div className="p-3 w-100">
+                                    <h5 className="mb-2">{car.brand} {car.model}</h5>
+                                    <div className="row mb-3">
+                                        <div className="col-6">
+                                            <div><strong>From:</strong> {booking.startDate}</div>
+                                            <div><strong>Price/Day:</strong> ₹{car.pricePerDay}</div>
+                                        </div>
+                                        <div className="col-6">
+                                            <div><strong>To:</strong> {booking.endDate}</div>
+                                            <div><strong>Total:</strong> ₹{total}</div>
+                                        </div>
+                                    </div>
+                                    <div className="d-flex justify-content-end gap-2" style={{ marginTop: "1rem" }}>
+                                        <button
+                                            className="btn btn-secondary"
+                                            onClick={() => handleEdit(booking)}
+                                        >
+                                            Edit
+                                        </button>
+                                        <button
+                                            className="btn btn-primary"
+                                            onClick={() => handlePay(booking)}
+                                        >
+                                            Pay Rent
+                                        </button>
                                     </div>
                                 </div>
                             </div>
-                        );
-                    })}
-                </div>
-
+                        </div>
+                    );
+                })
             )}
         </div>
     );

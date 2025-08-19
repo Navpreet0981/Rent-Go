@@ -1,19 +1,16 @@
-// src/components/Navbar.js
-import React, { useState, useEffect } from 'react';
+// src/components/common/Navbar.js
+import React, { useState, useEffect, useContext } from 'react';
 import { Link } from 'react-router-dom';
-import './Navbar.css'
+import { DarkModeContext } from '../../contexts/DarkModeContext';
+import './Navbar.css';
 
 const Navbar = () => {
-    const [darkMode, setDarkMode] = useState(true);
+    const { darkMode, setDarkMode } = useContext(DarkModeContext);
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [role, setRole] = useState(null);
     const user = JSON.parse(localStorage.getItem('user'));
     const username = user?.username || '';
     const [showWelcome, setShowWelcome] = useState(false);
-
-    useEffect(() => {
-        document.body.className = darkMode ? 'bg-dark text-white dark-mode' : 'bg-light text-dark';
-    }, [darkMode]);
 
     useEffect(() => {
         const token = localStorage.getItem('token');
@@ -25,17 +22,16 @@ const Navbar = () => {
     const handleLogout = () => {
         localStorage.removeItem('token');
         localStorage.removeItem('role');
-        localStorage.removeItem('user'); // ✅ remove user too
-        window.location.href = '/'; // redirect to home/login
+        localStorage.removeItem('user');
+        window.location.href = '/';
     };
-
 
     useEffect(() => {
         const interval = setInterval(() => {
-            setShowWelcome((prev) => !prev); // Toggle every 30s
-        }, 10000); // 30,000 ms = 30 seconds
+            setShowWelcome((prev) => !prev); // Toggle every 10s
+        }, 10000);
 
-        return () => clearInterval(interval); // cleanup
+        return () => clearInterval(interval);
     }, []);
 
     return (
@@ -61,10 +57,6 @@ const Navbar = () => {
                     </span>
                 </div>
             </Link>
-
-
-
-
 
             <button
                 className="navbar-toggler"
@@ -110,18 +102,38 @@ const Navbar = () => {
                     )}
                 </ul>
 
-                {/* Dark Mode Toggle */}
-                <div className="form-check form-switch text-nowrap">
-                    <input
-                        className="form-check-input"
-                        type="checkbox"
-                        id="modeSwitch"
-                        checked={darkMode}
-                        onChange={() => setDarkMode(!darkMode)}
-                    />
-                    <label className="form-check-label" htmlFor="modeSwitch">
-                        {darkMode ? 'Dark' : 'Light'} Mode
-                    </label>
+                {/* Dark Mode Toggle Icon Only */}
+                <div className="d-flex align-items-center ms-3">
+                    <button
+                        className="btn btn-outline-secondary rounded-circle"
+                        style={{
+                            width: '38px',
+                            height: '38px',
+                            padding: 0,
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            border: 'none',
+                            background: 'none'
+                        }}
+                        onClick={() => setDarkMode(!darkMode)}
+                        aria-label="Toggle dark mode"
+                    >
+                        {darkMode ? (
+                            <img
+
+                                src="https://cdn-icons-png.flaticon.com/512/869/869869.png"
+                                alt="Night"
+                                style={{ width: '28px', height: '28px' }}
+                            />
+                        ) : (
+                            <img
+                                src="https://cdn-icons-png.flaticon.com/512/702/702471.png"
+                                alt="Day"
+                                style={{ width: '28px', height: '28px' }}
+                            />
+                        )}
+                    </button>
                 </div>
             </div>
         </nav>

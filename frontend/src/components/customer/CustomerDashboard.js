@@ -1,10 +1,12 @@
 import React, { useEffect, useState, useContext } from "react";
 import axios from "axios";
 import { DarkModeContext } from '../../contexts/DarkModeContext';
+import Payment from './Payment';  // import the Payment component you created
 
 const CustomerDashboard = () => {
     const { darkMode } = useContext(DarkModeContext);
     const [bookings, setBookings] = useState([]);
+    const [selectedBooking, setSelectedBooking] = useState(null); // Track which booking is paying
     const user = JSON.parse(localStorage.getItem('user'));
 
     useEffect(() => {
@@ -21,18 +23,28 @@ const CustomerDashboard = () => {
     }
 
     const handleEdit = (booking) => {
-        // logic to open edit form/modal with booking data
         alert("Edit booking " + booking.id);
     };
 
     const handlePay = (booking) => {
-        // logic to start payment
-        alert("Pay for booking " + booking.id);
+        setSelectedBooking(booking);  // Open payment modal or area with this booking
+    };
+
+    const closePayment = () => {
+        setSelectedBooking(null);
+        // Optionally refresh bookings after payment
+        if (user) {
+            axios
+                .get(`http://localhost:8080/api/bookings/user/${user.id}`)
+                .then((res) => setBookings(res.data))
+                .catch((err) => console.error("Error fetching bookings:", err));
+        }
     };
 
     return (
         <div className="container py-5">
             <h4 className="mb-4">Your Bookings</h4>
+
             {bookings.length === 0 ? (
                 <p>No bookings found.</p>
             ) : (
@@ -71,7 +83,7 @@ const CustomerDashboard = () => {
                                         transition: "background-color 0.5s ease"
                                     }}
                                 />
-                                {/* Details and Buttons */}
+
                                 <div className="p-3 w-100">
                                     <h5 className="mb-2">{car.brand} {car.model}</h5>
                                     <div className="row mb-3">
@@ -84,6 +96,7 @@ const CustomerDashboard = () => {
                                             <div><strong>Total:</strong> ₹{total}</div>
                                         </div>
                                     </div>
+
                                     <div className="d-flex justify-content-end gap-2" style={{ marginTop: "1rem" }}>
                                         <button
                                             className="btn btn-secondary"
@@ -103,6 +116,19 @@ const CustomerDashboard = () => {
                         </div>
                     );
                 })
+            )}
+
+            {/* Show Payment component modal or section */}
+            {selectedBooking && (
+                <div className="payment-modal">
+                    <button onClick={closePayment} style={{ float: "right", marginBottom: "10px" }}>Close X</button>
+                    <Payment
+                        carId={selectedBooking.car.id}
+                        userId={selectedBooking.userId}
+                        startDate={selectedBooking.startDate}
+                        endDate={selectedBooking.endDate}
+                    />
+                </div>
             )}
         </div>
     );

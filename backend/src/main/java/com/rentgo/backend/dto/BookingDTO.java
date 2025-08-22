@@ -8,6 +8,18 @@ public class BookingDTO {
     private LocalDate startDate;
     private LocalDate endDate;
 
+    private String licenceDocument;
+    private LocalDate licenceExpiryDate;
+
+    private String idProofDocument;
+    private String idProofType;
+    private String idProofNumber;
+
+    private boolean damageConsent;
+
+    private String paymentMethod;
+    private String paymentStatus;
+
     // Getters and Setters
     public Long getCarId() {
         return carId;
@@ -39,5 +51,69 @@ public class BookingDTO {
 
     public void setEndDate(LocalDate endDate) {
         this.endDate = endDate;
+    }
+
+    public String getLicenceDocument() {
+        return licenceDocument;
+    }
+
+    public void setLicenceDocument(String licenceDocument) {
+        this.licenceDocument = licenceDocument;
+    }
+
+    public LocalDate getLicenceExpiryDate() {
+        return licenceExpiryDate;
+    }
+
+    public void setLicenceExpiryDate(LocalDate licenceExpiryDate) {
+        this.licenceExpiryDate = licenceExpiryDate;
+    }
+
+    public String getIdProofDocument() {
+        return idProofDocument;
+    }
+
+    public void setIdProofDocument(String idProofDocument) {
+        this.idProofDocument = idProofDocument;
+    }
+
+    public String getIdProofType() {
+        return idProofType;
+    }
+
+    public void setIdProofType(String idProofType) {
+        this.idProofType = idProofType;
+    }
+
+    public String getIdProofNumber() {
+        return idProofNumber;
+    }
+
+    public void setIdProofNumber(String idProofNumber) {
+        this.idProofNumber = idProofNumber;
+    }
+
+    public boolean isDamageConsent() {
+        return damageConsent;
+    }
+
+    public void setDamageConsent(boolean damageConsent) {
+        this.damageConsent = damageConsent;
+    }
+
+    public String getPaymentMethod() {
+        return paymentMethod;
+    }
+
+    public void setPaymentMethod(String paymentMethod) {
+        this.paymentMethod = paymentMethod;
+    }
+
+    public String getPaymentStatus() {
+        return paymentStatus;
+    }
+
+    public void setPaymentStatus(String paymentStatus) {
+        this.paymentStatus = paymentStatus;
     }
 }

@@ -37,6 +37,16 @@ public class BookingController {
                 dto.getUserId()
         );
 
+        // Set new fields from DTO
+        booking.setLicenceDocument(dto.getLicenceDocument());
+        booking.setLicenceExpiryDate(dto.getLicenceExpiryDate());
+        booking.setIdProofDocument(dto.getIdProofDocument());
+        booking.setIdProofType(dto.getIdProofType());
+        booking.setIdProofNumber(dto.getIdProofNumber());
+        booking.setDamageConsent(dto.isDamageConsent());
+        booking.setPaymentMethod(dto.getPaymentMethod());
+        booking.setPaymentStatus(dto.getPaymentStatus() != null ? dto.getPaymentStatus() : "PENDING");
+
         bookingRepository.save(booking);
 
         // Optional: set car as unavailable
